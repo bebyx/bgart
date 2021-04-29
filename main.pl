@@ -3,23 +3,24 @@
 use strict;
 use warnings;
 
-use Cwd;
+use File::Basename;
+use lib (dirname(__FILE__) . "/mods");;
 
-use lib "./mods";
 use Unzip;
 use Webroutine;
 
-my $path = cwd();
+my $path = dirname(__FILE__);
+
 my $data_zip = "data.zip";
 my $data_url = "https://www.wga.hu/database/download/data_txt.zip";
 
 my $web_agent = agent("bgart/0.1");
 my $web_resource = connect($web_agent, $data_url);
-download($web_resource, $data_zip);
+download($web_resource, $data_zip, $path);
 
 unzip($path, $data_zip);
 
-system("rm ./$data_zip");
+system("rm $path/$data_zip");
 
 my $image = "source.png";
 

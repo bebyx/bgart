@@ -26,10 +26,10 @@ sub connect {
 }
 
 sub download {
-  my ($resource, $file_name) = @_;
+  my ($resource, $file_name, $path) = @_;
   if ($resource->is_success) {
       my $page = $resource->content;
-      open(OUT,">","./$file_name") or die "Could not open the output file: $!";
+      open(OUT,">","$path/$file_name") or die "Could not open the output file: $!";
       print OUT $page;
       close(OUT);
   }

@@ -13,5 +13,5 @@ sub unzip {
   my $status = $zip->read( "$path/$file");
   die "Read of $file failed\n" if $status != AZ_OK;
 
-  $zip->extractTree();
+  $zip->extractTree("", "$path");
 }
