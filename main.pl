@@ -19,8 +19,7 @@ my $web_resource = connect($web_agent, $data_url);
 download($web_resource, $data_zip, $path);
 
 unzip($path, $data_zip);
-
-system("rm $path/$data_zip");
+unlink("$path/$data_zip");
 
 my $image = "source.png";
 
