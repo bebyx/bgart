@@ -2,31 +2,38 @@ package Webroutine;
 use strict;
 use warnings;
 use Exporter;
+use LWP;
 
 
 our @ISA= qw( Exporter );
-our @EXPORT = qw( connect download );
+our @EXPORT = qw( agent connect download );
+
+sub agent {
+  my ($agent_name) = @_;
+  my $user_agent = LWP::UserAgent->new;
+  $user_agent->agent("$agent_name");
+  return $user_agent;
+}
 
 sub connect {
-  my $user_agent = LWP::UserAgent->new;
-  $user_agent->agent("bgart/0.1");
+  my ($user_agent, $target_url) = @_;
 
-  my $req = HTTP::Request->new(GET => 'https://www.wga.hu/database/download/data_txt.zip');
+  my $request = HTTP::Request->new(GET => "$target_url");
 
-  my $res = $user_agent->request($req);
+  my $resource = $user_agent->request($request);
 
-  return $res;
+  return $resource;
 }
 
 sub download {
-  my ($res, $file_name) = @_;
-  if ($res->is_success) {
-      my $page = $res->content;
+  my ($resource, $file_name) = @_;
+  if ($resource->is_success) {
+      my $page = $resource->content;
       open(OUT,">","./$file_name") or die "Could not open the output file: $!";
       print OUT $page;
       close(OUT);
   }
   else {
-      print $res->status_line, "\n";
+      print $resource->status_line, "\n";
   }
 }

@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 
-use LWP;
 use Cwd;
 
 use lib "./mods";
@@ -12,8 +11,10 @@ use Webroutine;
 
 my $path = cwd();
 my $data_zip = "data.zip";
+my $data_url = "https://www.wga.hu/database/download/data_txt.zip";
 
-my $web_resource = connect;
+my $web_agent = agent("bgart/0.1");
+my $web_resource = connect($web_agent, $data_url);
 download($web_resource, $data_zip);
 
 unzip($path, $data_zip);
