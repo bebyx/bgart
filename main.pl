@@ -5,12 +5,11 @@ use warnings;
 
 use Cwd 'abs_path';
 use File::Basename;
-use lib (dirname(__FILE__) . "/mods");;
-
-use Text::CSV_XS;
+use lib (dirname(abs_path __FILE__) . "/mods");;
 
 use Unzip;
 use Webroutine;
+use CSVroutine;
 
 my $path = dirname(abs_path __FILE__);
 
@@ -24,37 +23,16 @@ download($web_resource, $data_zip, $path);
 unzip($path, $data_zip);
 unlink("$path/$data_zip");
 
-
-my $fh;
-my $raw_url;
-
+my $csv_file = "catalog.csv";
 # Count rows and take some random
-
-open($fh, "<:encoding(iso-8859-1)", "catalog.csv") or die "catalog.csv: $!";
-my $lines = 0;
-while (<$fh>) {
-    $lines++;
-}
-my $rand_line = 1 + int rand($lines);
-close $fh;
+my $rand_row = random_row($path, $csv_file);
 
 # Read CSV and extract the URL of a random pic
-
-my $csv = Text::CSV_XS->new ({ binary => 1, auto_diag => 1 });
-open($fh, "<", "catalog.csv") or die "catalog.csv: $!";
-while (my $row = $csv->getline ($fh)) {
-  my @fields = @$row;
-  if($. == $rand_line) {
-    $raw_url = "$fields[6]\n";
-    last;
-  }
-}
-close $fh;
+my $raw_url = extract_url($path, $csv_file, $rand_row);
 
 chomp $raw_url;
 my $pic_url = $raw_url =~ s/^(.+)html(.+).html/$1art$2.jpg/r;
 my $image_name = $pic_url =~ s/^.+\/(.+\.jpg)/$1/r;
-
 
 $web_resource = connect($web_agent, $pic_url);
 download($web_resource, $image_name, $path);
