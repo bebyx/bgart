@@ -34,6 +34,8 @@ chomp $raw_url;
 my $pic_url = $raw_url =~ s/^(.+)html(.+).html/$1art$2.jpg/r;
 my $image_name = $pic_url =~ s/^.+\/(.+\.jpg)/$1/r;
 
+unlink(glob("$path/*.csv"));
+unlink(glob("$path/*.jpg"));
 $web_resource = connect($web_agent, $pic_url);
 download($web_resource, $image_name, $path);
 
