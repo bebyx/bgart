@@ -18,6 +18,34 @@ sudo apt install libarchive-zip-perl libtext-csv-xs-perl
 ```
 ## Installation
 
-Automatic distribution is being developed.
+The most straightforward way is to download this repo source code and call `bgart.pl` from any folder.
 
-For now, you can download this repo source code and call `bgart.pl` from any folder.
+You can also set everything in `/home/user/.local/` folder, intended for user environment executables and libs.
+
+To install:
+
+```bash
+make install
+```
+
+To uninstall:
+
+```bash
+make uninstall
+```
+
+You can also use this command to quickly set `.local` folder with this command:
+
+```bash
+make setlocal
+```
+
+However, this will export path for `.local/bin` for your current shell session only.
+
+You will also probably want to make sure the folder is included in a path export command in your `.bashrc`, `.profile`, `.zshrc` or the one for whatever shell you use in order to export every time you start a new shell session.
+
+For instance, my `.zshrc` file has this:
+
+```bash
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+```
